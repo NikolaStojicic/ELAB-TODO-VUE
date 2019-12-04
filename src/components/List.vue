@@ -4,8 +4,7 @@
       <b-row>
         <b-col xs="12" sm="6" md="4" v-for="list in lists" :key="list.id">
           <div class="controls">
-            <b-badge class="mt-2" href="#" variant="info" pill>Edit</b-badge>
-
+            <Dropdown label="Title" @changeItem="changeTitle(list, ...arguments)" />
             <b-badge @click.prevent="deleteList(list)" href="#" variant="danger" pill>X</b-badge>
           </div>
 
@@ -36,12 +35,21 @@
 
 <script>
 import ListItem from "@/components/ListItem.vue";
+import Dropdown from "@/components/Dropdown.vue";
 export default {
   components: {
-    ListItem
+    ListItem,
+    Dropdown
   },
 
   methods: {
+    async changeTitle(list, title) {
+      console.log(list, title);
+      await this.$http.put(`${this.$store.state.baseUrl}/liste/${list.id}`, {
+        title
+      });
+      this.updateUi();
+    },
     async updateUi() {
       const response = await this.$http.get(
         `${this.$store.state.baseUrl}/liste.json`

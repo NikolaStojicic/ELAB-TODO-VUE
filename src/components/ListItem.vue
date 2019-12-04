@@ -5,6 +5,7 @@
       @click="changeStatus(item)"
       v-for="(item, id) in list.itemi"
       :key="id"
+      id="list-item"
       class="d-flex justify-content-between align-items-center"
       :variant="(item.status == '0')?'info':'success'"
     >
@@ -12,12 +13,17 @@
         :style="(item.status == '0')?'textDecoration: none;':'textDecoration: line-through'"
       >{{id + 1}}. {{item.content}}</div>
       <div>
-        <Dropdown @changeItem="changeItem(item, ...arguments)" label="Content" />
+        <Dropdown
+          type="item"
+          id="change-item"
+          @changeItem="changeItem(item, ...arguments)"
+          label="Content"
+        />
         <b-badge @click.stop="deleteItem(item)" href="#" variant="danger" pill>X</b-badge>
       </div>
     </b-list-group-item>
 
-    <b-input-group class="mt-1" prepend="New item">
+    <b-input-group class="mt-3" style="z-index: 0" prepend="New item">
       <b-form-input v-model="newItem"></b-form-input>
       <b-input-group-append>
         <b-button @click="addItem(list)" size="sm" text="Add" variant="success">Add</b-button>
@@ -72,6 +78,7 @@ export default {
       this.$emit("update-lists");
     },
     async addItem(list) {
+      if (this.newItem.length < 1) return;
       const resBody = { content: this.newItem, status: 0, list_id: list.id };
       await this.$http.post(`${this.$store.state.baseUrl}/itemi`, resBody);
       this.newItem = "";
@@ -81,5 +88,5 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 </style>

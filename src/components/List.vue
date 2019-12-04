@@ -9,8 +9,8 @@
           </div>
 
           <b-card-group deck>
-            <b-card class="mt-5 mx-1" no-body :header="list.title">
-              <b-list-group flush>
+            <b-card class="mt-5 mx-1" bg-variant="light" no-body :header="list.title">
+              <b-list-group class="mt-3" flush>
                 <ListItem @update-lists="updateUi" :list="list" />
               </b-list-group>
             </b-card>

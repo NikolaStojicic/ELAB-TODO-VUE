@@ -1,18 +1,16 @@
 <template>
   <span @click.stop>
     <b-badge @click="enabled = !enabled" class="mt-2" href="#" variant="info" pill>Edit</b-badge>
-    <div id="form" v-if="enabled">
-      <b-form-group>
-        <b-form-input v-model="content" size="sm" :placeholder="label"></b-form-input>
-      </b-form-group>
-      <b-row class="justify-content-around">
-        <b-col>
-          <b-button @click="enabled = !enabled" block variant="danger" size="sm">Exit</b-button>
-        </b-col>
-        <b-col>
-          <b-button @click="changeTitle" block variant="info" size="sm">Change</b-button>
-        </b-col>
-      </b-row>
+    <div :class="type == 'item'? 'item-fix': '' " id="form" v-if="enabled">
+      <b-form-input
+        autofocus
+        @focusout="focusOut"
+        class="mr-1"
+        v-model="content"
+        size="sm"
+        :placeholder="label"
+      ></b-form-input>
+      <b-button @mousedown.prevent @click="changeTitle" variant="info" size="sm">✔</b-button>
     </div>
   </span>
 </template>
@@ -22,9 +20,15 @@ export default {
   props: {
     label: {
       type: String
+    },
+    type: {
+      type: String
     }
   },
   methods: {
+    focusOut() {
+      this.enabled = false;
+    },
     changeTitle() {
       if (this.content.length < 1) return;
       this.$emit("changeItem", this.content);
@@ -35,7 +39,8 @@ export default {
   data() {
     return {
       enabled: false,
-      content: ""
+      content: "",
+      btnFocus: false
     };
   }
 };
@@ -43,11 +48,15 @@ export default {
 
 <style scoped>
 #form {
-  width: 200px;
+  width: 150px;
   background-color: rgb(240, 240, 240);
   position: absolute;
   z-index: 2;
   border-radius: 5px;
   padding: 5px;
+  display: flex;
+}
+.item-fix {
+  left: 50%;
 }
 </style>

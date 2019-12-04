@@ -3,11 +3,16 @@
     <b-container class="bv-example-row">
       <b-row>
         <b-col xs="12" sm="6" md="4" v-for="list in lists" :key="list.id">
-          <b-badge @click.prevent="deleteList(list)" id="listclose" href="#" variant="danger" pill>X</b-badge>
+          <div class="controls">
+            <b-badge class="mt-2" href="#" variant="info" pill>Edit</b-badge>
+
+            <b-badge @click.prevent="deleteList(list)" href="#" variant="danger" pill>X</b-badge>
+          </div>
+
           <b-card-group deck>
             <b-card class="mt-5 mx-1" no-body :header="list.title">
               <b-list-group flush>
-                <ListItem @update-lists="updateUi" @delete-item="deleteItem" :list="list" />
+                <ListItem @update-lists="updateUi" :list="list" />
               </b-list-group>
             </b-card>
           </b-card-group>
@@ -70,15 +75,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#listclose {
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   position: absolute;
+  width: 100%;
   top: 40px;
-  right: 0px;
+  left: 0;
   z-index: 1;
 }
 @media (max-width: 576px) {
-  #listclose {
-    right: 5px;
+  .controls {
+    padding: 0 10px;
   }
 }
 </style>

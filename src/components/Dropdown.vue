@@ -1,7 +1,7 @@
 <template>
   <span @click.stop>
-    <b-badge @click="enabled = !enabled" class="mt-2" href="#" variant="info" pill>Edit</b-badge>
-    <div :class="type == 'item'? 'item-fix': '' " id="form" v-if="enabled">
+    <b-badge id="edit" @click="enabled = !enabled" class="mt-2" href="#" variant="info" pill>Edit</b-badge>
+    <div href="#edit" :class="type == 'item'? 'item-fix': '' " id="form" v-if="enabled">
       <b-form-input
         autofocus
         @focusout="focusOut"
@@ -58,5 +58,16 @@ export default {
 }
 .item-fix {
   left: 50%;
+}
+
+@media (max-width: 576px) {
+  .item-fix {
+    left: 70%;
+  }
+}
+@media (max-width: 480px) {
+  .item-fix {
+    left: 50%;
+  }
 }
 </style>

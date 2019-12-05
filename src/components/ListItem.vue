@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-list-group-item
-      href="#"
+      style="pointer: cursor"
       @click="changeStatus(item)"
       v-for="(item, id) in list.itemi"
       :key="id"

@@ -1,16 +1,28 @@
 <template>
   <div>
-    <b-container class="bv-example-row">
+    <b-container>
       <b-row>
+        <!-- v-for dirketiva sluzi da renderuje nesto sto je itreabilno bez kopiranja koda, npr. -->
+        <!-- Pokazati ovaj primer kako radi: <div v-for="item in 5" :key="item.id">{{ item }}</div> -->
+        <!-- :key sluzi da jedinstveno indentifikuje item u listi -->
         <b-col xs="12" sm="6" md="4" v-for="list in lists" :key="list.id">
           <div class="controls">
+            <!-- Edit dugme za listu
+               Ovde renderujemo ucitanu komponentu, prosledjujemo joj prop label i postavljamo eventListener
+            koji se $emituje iz te komponente i pozivamo metodu kad se to desi, ...arguments je payload koji nam salje
+            $emit, a list je argument iz v-fora-->
             <Dropdown label="Title" @changeItem="changeTitle(list, ...arguments)" />
+            <!-- Kada se klikne na ovaj badge koji sluzi za brisanje, poziva  se metoda delteList, .prevent sluzi da
+            ne bi se izvrsio href-->
             <b-badge @click.prevent="deleteList(list)" href="#" variant="danger" pill>X</b-badge>
           </div>
 
           <b-card-group deck>
             <b-card class="mt-5 mx-1" bg-variant="light" no-body :header="list.title">
               <b-list-group class="mt-3" flush>
+                <!-- Ovde prosledjujemo listu itema ListItem komponenti koja u sebi
+                renderuje stavke u odnosu na listu i osluskujemo na event
+                update-lists koji ako se desi pozivamo updateUi metodu-->
                 <ListItem @update-lists="updateUi" :list="list" />
               </b-list-group>
             </b-card>
@@ -20,6 +32,8 @@
           <b-card-group deck>
             <b-card class="mt-5 mx-1" no-body>
               <b-input-group prepend="New list">
+                <!-- v-model direktiva sluzi za 2way data binding, sve sto se unese u inputu, automatski
+                je uneto u newListTitle data objektu, vazi i obrnuto-->
                 <b-form-input v-model="newListTitle"></b-form-input>
                 <b-input-group-append>
                   <b-button @click="addList" size="sm" text="Add" variant="success">Add</b-button>
@@ -43,8 +57,10 @@ export default {
   },
 
   methods: {
+    // asinhrono menjamo naslov liste, potom updatujemo UI
+    // analogno i za ostale requestove
+    // this.$store.state.baseUrl uzimanje URL-a do backa
     async changeTitle(list, title) {
-      console.log(list, title);
       await this.$http.put(`${this.$store.state.baseUrl}/liste/${list.id}`, {
         title
       });
@@ -82,7 +98,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .controls {
   display: flex;
   justify-content: space-between;
